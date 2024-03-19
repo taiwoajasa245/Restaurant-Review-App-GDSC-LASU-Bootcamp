@@ -15,7 +15,7 @@ function Fetchdata() {
             }
         };
 
-        fetchData();
+        fetchData(); 
     }, []);
 
     return (

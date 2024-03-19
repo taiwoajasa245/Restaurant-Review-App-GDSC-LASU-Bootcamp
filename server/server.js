@@ -8,12 +8,7 @@ dotenv.config();
 
 
 // to prevent ajax request
-app.use(cors({
-    origin: ['http://localhost:3000', 'https://restaurant-review-app-gdsc-lasu-bootcamp-dlq2inawh.vercel.app/'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true, // Enable credentials (cookies, authorization headers, etc.)
-  }));
+app.use(cors());
   
 
 
