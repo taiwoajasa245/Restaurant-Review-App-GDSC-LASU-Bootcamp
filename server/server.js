@@ -9,7 +9,14 @@ dotenv.config();
 
 // middleware 
 app.use(express.json());
-app.use(cors()); 
+// app.use(cors()); 
+app.use(cors({
+    origin: ['http://localhost:3000', 'https://restaurant-review-app-gdsc-lasu-bootcamp.vercel.app'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true, // Enable credentials (cookies, authorization headers, etc.)
+  }));
+  
 
 
 // Routes

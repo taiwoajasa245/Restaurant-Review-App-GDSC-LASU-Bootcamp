@@ -8,7 +8,6 @@ function Fetchdata() {
             try {
                 const response = await fetch('http://localhost:4000/api/data');
                 const jsonData = await response.json();
-                console.log(jsonData);
                 setData(jsonData);
             } catch (error) {
                 console.error('Error fetching data:', error);
