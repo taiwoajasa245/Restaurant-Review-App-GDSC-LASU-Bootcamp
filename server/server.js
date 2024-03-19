@@ -10,6 +10,14 @@ app.use(express.json());
 // Routes
 app.use('/api/home', somethingRoutes);
 
+app.get('/', (req, res) => res.send('Home Page Route'));
+
+app.get('/about', (req, res) => res.send('About Page Route'));
+
+app.get('/portfolio', (req, res) => res.send('Portfolio Page Route'));
+
+app.get('/contact', (req, res) => res.send('Contact Page Route'));
+
 
 
 const port = process.env.PORT || 4000;
