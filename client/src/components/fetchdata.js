@@ -6,7 +6,7 @@ function Fetchdata() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('http://localhost:4000/api/data');
+                const response = await fetch('https://restaurant-review-app-gdsc-lasu-bootcamp-server.vercel.app/api/data');
                 const jsonData = await response.json();
                 setData(jsonData);
             } catch (error) {
@@ -14,7 +14,7 @@ function Fetchdata() {
             }
         };
 
-        fetchData(); 
+        fetchData();
     }, []);
 
     return (
