@@ -7,13 +7,10 @@ const app = express();
 dotenv.config();
 
 
-// to prevent ajax request
-app.use(cors());
-  
-
-
 // middleware 
 app.use(express.json());
+app.use(cors()); 
+
 
 // Routes
 app.use('/api/home', somethingRoutes);
