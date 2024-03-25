@@ -1,55 +1,62 @@
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-const { generateAndSaveToken } = require('../utils/token'); // Import necessary token functions
-const generateVerificationToken = require('../utils/generateVerificationToken');
-// const sendEmail = require('../utils/sendEmail');
+const { generateAndSaveToken, generateToken, validateToken } = require('../utils/token'); // Import necessary token functions
+const generateVerificationToken = require('../utils/generateVeriToken');
+const sendEmail = require('../utils/sendEmail');
 
 // Signup
 // Signup function
 const signup = async (req, res) => {
-    const { name, username, email, password, gender } = req.body;
-  
-    try {
-      // Check if user already exists
-      let user = await User.findOne({ email });
-      if (user) {
-        return res.status(400).json({ message: 'User already exists' });
-      }
-  
-      // Create new user
-      user = new User({
-        name,
-        username,
-        email,
-        password,
-        // gender,
-      });
-  
-      // Hash password
-      const salt = await bcrypt.genSalt(10);
-      user.password = await bcrypt.hash(password, salt);
-  
-      // Save user to database
-      await user.save();
-  
-      // Generate verification token
-      const verificationToken = generateVerificationToken();
-  
-      // Save verification token to database
-      await generateAndSaveToken(verificationToken, user._id);
-  
-      // Send verification email
-      const message = `Your verification token is: ${verificationToken}`;
-      await sendEmail(email, 'Email Verification', message);
-  
-      // Return response
-      res.status(201).json({ message: 'User registered successfully. Please check your email for verification' });
-    } catch (error) {
-      console.error(error.message);
-      res.status(500).json({ message: 'Server Error' });
+  const { name, username, email, password, gender } = req.body;
+
+  try {
+    // Check if user already exists
+    let user = await User.findOne({ email });
+    if (user) {
+      return res.status(400).json({ message: 'User already exists' });
     }
-  };
+
+    // Create new user
+    user = new User({
+      name,
+      username,
+      email,
+      password,
+      // gender,
+    });
+
+
+    // Hash password
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(password, salt);
+
+    // Save user to database
+    const savedUser = await user.save();
+    const { role, ...user_data } = savedUser._doc;
+
+    // Generate verification token
+    const verificationToken = generateVerificationToken();
+
+    // Save verification token to database
+    await generateAndSaveToken(verificationToken, user._id);
+
+    // Send verification email
+    const message = `Your verification token is: ${verificationToken}`;
+
+    await sendEmail(email, 'Email Verification', message);
+
+    // Return response
+    res.status(201).json({
+      message: 'User registered successfully. Please check your email for verification', data: [user_data],
+    });
+
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ message: 'Server Error' });
+
+  }
+};
 
 
 // Verify Email
@@ -92,7 +99,16 @@ const login = async (req, res) => {
 
     const token = generateToken({ userId: user._id });
 
-    res.status(200).json({ token });
+    const { pass, ...user_data } = user._doc;
+
+    res.status(200).json({
+        status: "success",
+        data: [user_data],
+        message: "You have successfully logged in.",
+        token: token
+    });
+
+    // res.status(200).json({ token });
   } catch (err) {
     console.error(err.message);
     res.status(500).json({ message: 'Server Error' });

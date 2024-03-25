@@ -1,17 +1,18 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv')
+const mongoose = require('mongoose');
 const connectDB = require('./configuration/db');
 const authRoutes = require('./routes/authRoute');
 const userRoutes = require('./routes/userRoute');
-const authMiddleware = require('./middleware/authMid'); 
-const error = require('./middleware/errorMid'); 
+const authMiddleware = require('./middleware/authMid');
+const error = require('./middleware/errorMid');
 const app = express();
 dotenv.config();
 
 
 // middleware 
-app.use(express.urlencoded({extended: false})); 
+app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors());
 
@@ -21,20 +22,44 @@ app.use(cors());
 connectDB();
 
 // Routes
+
 app.use('/api/', authRoutes);
 app.use('/api/users', authMiddleware, userRoutes);
 
 
 //The 404 Route (ALWAYS Keep this as the last route)
 app.use(error)
+
 app.get('*', function (req, res) {
-    res.status(404).send('404, Page not found please contact the admin for more information ');
-    
+    // res.status(404).send('404, Page not found please contact the admin for more information ');
+    try {
+        res.status(200).json({
+            status: "success",
+            data: [],
+            message: "Welcome to our API homepage!",
+        });
+    } catch (err) {
+        res.status(500).json({
+            status: "error",
+            message: "Internal Server Error",
+        });
+    }
+
 });
 
 
-const port = process.env.PORT || 4000;
-app.listen(port, () => {
-    console.log(`Server listening for request on port ${port}`);
-})
+
+mongoose.connection.once('open', () => {
+
+    const PORT = process.env.PORT || 4000;
+    try {
+        console.log('Connected to MongoDB');
+        app.listen(PORT, () => { console.log(`listening for request on ${PORT}`) });
+    } catch (error) {
+        console.log("Can not connect to MongoDB ", error);
+    }
+
+});
+
+
 
