@@ -1,14 +1,19 @@
 import React, { useState, useEffect } from 'react';
+import axios from "axios";
 
 function Fetchdata() {
     const [data, setData] = useState(null);
+    const url = process.env.REACT_APP_SERVER_URL;
+
+ 
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('https://restaurant-review-app-gdsc-lasu-bootcamp-server.vercel.app/api/data');
-                const jsonData = await response.json();
-                setData(jsonData);
+                const response = await axios.get(`${url}/api/data`);
+                setData(response);
+                // console.log(response);
+
             } catch (error) {
                 console.error('Error fetching data:', error);
             }

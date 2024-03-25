@@ -1,32 +1,56 @@
-// import logo from './logo.svg';
-import Fetchdata from './components/fetchdata'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import './App.css';
+import Home from "./components/Home";
+import Fetchdata from './components/fetchdata';
+import Error from './components/errorPage';
+import Comingsoon from './components/comingsoon';
+import Footer from './components/footer';
+import Navbar from './components/Navbar';
+import BodyFunction from './components/Body';
+import Place from './components/Place';
+import NavX from './components/NavX'
+import Signup from './components/Signup';
+import Login from './components/Login'; 
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
+    <Router>
+      <div className="App">
+        <div className='page-content'>
+          <Switch>
 
-        <div className="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
-          <svg className="absolute w-12 h-12 text-gray-400 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd"></path></svg>
+
+            <Route exact path='/'>
+              <Navbar />
+              <BodyFunction />
+              <Place />
+              <Footer />
+            </Route>
+
+
+            <Route path='/signup'>
+              <NavX />
+              <Signup />
+              <Footer />
+            </Route>
+
+            <Route path='/login'>
+              <NavX />
+              <Login />
+              <Footer />
+            </Route>
+
+            <Route path='/comming'>
+              <Comingsoon />
+            </Route>
+
+            <Route component={Error} />
+
+          </Switch>
+
         </div>
-
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="text-3xl font-bold underline"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-
-        >
-          Learn React
-
-        </a>
-        <Fetchdata /> 
-      </header>
-    </div>
+      </div >
+    </Router>
   );
 }
 

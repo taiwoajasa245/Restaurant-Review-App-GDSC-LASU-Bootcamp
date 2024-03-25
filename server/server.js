@@ -1,39 +1,30 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv')
-const somethingRoutes = require('./routes/something');
-const dummyData = require('./utils/data')
+const Home= require('./routes/home');
+const error = require('./middleware/errorMid'); 
 const app = express();
 dotenv.config();
 
 
 // middleware 
+app.use(express.urlencoded({extended: false})); 
 app.use(express.json());
-// app.use(cors()); 
-app.use(cors({
-    origin: ['http://localhost:3000', 'https://restaurant-review-app-gdsc-lasu-bootcamp.vercel.app'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true, // Enable credentials (cookies, authorization headers, etc.)
-  }));
-  
+app.use(cors());
+
 
 
 // Routes
-app.use('/api/home', somethingRoutes);
+app.use('/api/', Home);
 
-app.get('/', (req, res) => { res.status(200).json({ message: "Welcome Back Taiwo" }) })
 
-app.get('/api/data', (req, res) => {
-    res.status(200).json({ data: dummyData });
 
+//The 404 Route (ALWAYS Keep this as the last route)
+app.use(error)
+app.get('*', function (req, res) {
+    res.status(404).send('404, Page not found please contact the admin for more information ');
+    
 });
-
-app.get('/portfolio', (req, res) => res.send('Portfolio Page Route'));
-
-app.get('/contact', (req, res) => res.send('Contact Page Route'));
-
-
 
 
 const port = process.env.PORT || 4000;
