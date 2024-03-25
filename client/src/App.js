@@ -1,7 +1,5 @@
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom'
 import './App.css';
-import Home from "./components/Home";
-import Fetchdata from './components/fetchdata';
 import Error from './components/errorPage';
 import Comingsoon from './components/comingsoon';
 import Footer from './components/footer';
@@ -11,6 +9,7 @@ import Place from './components/Place';
 import NavX from './components/NavX'
 import Signup from './components/Signup';
 import Login from './components/Login'; 
+import Postreview from './components/Postreview';
 
 function App() {
   return (
@@ -21,10 +20,15 @@ function App() {
 
 
             <Route exact path='/'>
-              <Navbar />
+              <Redirect to='/writeareview' />
+            </Route>
+
+            <Route exact path='/writeareview'>
               <BodyFunction />
-              <Place />
-              <Footer />
+            </Route>
+
+            <Route exact path='/writeareview/writepost'>
+               <Postreview /> 
             </Route>
 
 
