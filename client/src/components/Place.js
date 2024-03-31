@@ -6,34 +6,54 @@ const Place = ({ totalStars }) => {
             imageUrl: process.env.PUBLIC_URL + "/img/food.jpeg",
             restaurantName: 'Fog Harbor Fish House',
             recommendation: 'Do you recommend this business?',
-            isVisible: true // Add isVisible property to each card
+            isVisible: true
         },
         {
-            imageUrl: process.env.PUBLIC_URL + "/img/food.jpeg",
-            restaurantName: 'Fog House',
+            imageUrl: process.env.PUBLIC_URL + "/img/OIP.jpeg",
+            restaurantName: 'Fog Fish House',
             recommendation: 'Do you recommend this business?',
-            isVisible: true // Add isVisible property to each card
+            isVisible: true
         },
         {
             imageUrl: process.env.PUBLIC_URL + "/img/food.jpeg",
-            restaurantName: ' Harbor House',
+            restaurantName: 'Fog  House',
             recommendation: 'Do you recommend this business?',
-            isVisible: true // Add isVisible property to each card
+            isVisible: true
         },
         {
-            imageUrl: process.env.PUBLIC_URL + "/img/food.jpeg",
+            imageUrl: process.env.PUBLIC_URL + "/img/OIP.jpeg",
             restaurantName: 'Fish House',
             recommendation: 'Do you recommend this business?',
-            isVisible: true // Add isVisible property to each card
+            isVisible: true
+        },
+        {
+            imageUrl: process.env.PUBLIC_URL + "/img/OIP.jpeg",
+            restaurantName: ' House',
+            recommendation: 'Do you recommend this business?',
+            isVisible: true
         },
         {
             imageUrl: process.env.PUBLIC_URL + "/img/food.jpeg",
-            restaurantName: 'Fog  Fish House',
+            restaurantName: 'Fog Harbor ',
             recommendation: 'Do you recommend this business?',
-            isVisible: true // Add isVisible property to each card
+            isVisible: true
+        },
+        {
+            imageUrl: process.env.PUBLIC_URL + "/img/OIP.jpeg",
+            restaurantName: ' Harbor House',
+            recommendation: 'Do you recommend this business?',
+            isVisible: true
+        },
+        {
+            imageUrl: process.env.PUBLIC_URL + "/img/OIP.jpeg",
+            restaurantName: ' House',
+            recommendation: 'Do you recommend this business?',
+            isVisible: true
         },
         // Add more card data objects as needed
     ]);
+
+    const [visibleCards, setVisibleCards] = useState(4); // Initial number of visible cards
 
     const removeCard = (indexToRemove) => {
         setCardData(prevCardData =>
@@ -46,17 +66,24 @@ const Place = ({ totalStars }) => {
         console.log(`User rated: ${selectedRating} stars`);
     };
 
+    const handleShowMore = () => {
+        setVisibleCards(prevVisibleCards => prevVisibleCards + 4); // Show 4 more cards
+    };
+
     return (
         <div className='w-full p-5'>
             <h1 className='text-lg font-extrabold pb-7'>Visited one of these places recently?</h1>
-            {cardData.map((card, index) => (
+            {cardData.slice(0, visibleCards).map((card, index) => (
                 <PlaceCard key={index} card={card} index={index} removeCard={removeCard} handleRatingChange={handleRatingChange} />
             ))}
-            <div className='my-10 mb-15'>
-                <p className='text-center font-bold text-blue-500 hover:underline'>
-                    Show more suggestions
-                </p>
-            </div>
+            {visibleCards < cardData.length && (
+                <div className='my-10 mb-15 flex w-full text-center justify-center'>
+                    <p className='text-center cursor-pointer font-bold text-blue-500 hover:underline' onClick={handleShowMore}>
+                        Show more suggestions
+                    </p>
+                    <img src={process.env.PUBLIC_URL + "/img/arrowdown.svg"} alt="arrowdown" />
+                </div>
+            )}
         </div>
     );
 };
