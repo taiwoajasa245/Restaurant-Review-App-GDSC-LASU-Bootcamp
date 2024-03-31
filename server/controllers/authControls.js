@@ -8,7 +8,15 @@ const sendEmail = require('../utils/sendEmail');
 // Signup
 // Signup function
 const signup = async (req, res) => {
-  const { name, username, email, password, gender } = req.body;
+  const {
+    firstName,
+    lastName,
+    email,
+    password,
+    zipcode,
+    month,
+    day,
+    year } = req.body;
 
   try {
     // Check if user already exists
@@ -19,11 +27,14 @@ const signup = async (req, res) => {
 
     // Create new user
     user = new User({
-      name,
-      username,
+      firstName,
+      lastName,
       email,
       password,
-      // gender,
+      zipcode,
+      month,
+      day,
+      year
     });
 
 
@@ -99,16 +110,18 @@ const login = async (req, res) => {
 
     const token = generateToken({ userId: user._id });
 
+    res.cookie("token", token, {
+      httpOnly: true,
+    });
+
     const { pass, ...user_data } = user._doc;
 
     res.status(200).json({
-        status: "success",
-        data: [user_data],
-        message: "You have successfully logged in.",
-        token: token
-    });
+      status: "success",
+      id: user_data._id,
+      message: "You have successfully logged in.",
 
-    // res.status(200).json({ token });
+    });
   } catch (err) {
     console.error(err.message);
     res.status(500).json({ message: 'Server Error' });
@@ -117,67 +130,12 @@ const login = async (req, res) => {
 
 // Forgot Password
 const forgotPassword = async (req, res) => {
-  const { email } = req.body;
-
-  try {
-    const user = await User.findOne({ email });
-
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    const resetToken = generateVerificationToken();
-    const token = generateToken({ userId: user._id });
-
-    await Token.create({ token: resetToken, userId: user._id });
-
-    const message = `Please click on the following link to reset your password: ${resetToken}`;
-    await sendEmail(email, 'Reset Password', message);
-
-    res.status(200).json({ message: 'Password reset email sent' });
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).json({ message: 'Server Error' });
-  }
+  // logic 
 };
 
 // Reset Password
 const resetPassword = async (req, res) => {
-  const { token } = req.params;
-  const { password, confirmPassword } = req.body;
-
-  if (!password || !confirmPassword) {
-    return res.status(400).json({ message: 'Please provide both password and confirm password' });
-  }
-
-  try {
-    const tokenObj = await Token.findOne({ token });
-
-    if (!tokenObj) {
-      return res.status(400).json({ message: 'Invalid or expired reset token' });
-    }
-
-    const user = await User.findById(tokenObj.userId);
-
-    if (!user) {
-      return res.status(400).json({ message: 'User not found' });
-    }
-
-    if (password !== confirmPassword) {
-      return res.status(400).json({ message: 'Passwords do not match' });
-    }
-
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(password, salt);
-
-    await user.save();
-    await Token.findByIdAndDelete(tokenObj._id);
-
-    res.status(200).json({ message: 'Password reset successful' });
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).json({ message: 'Server Error' });
-  }
+  // logic
 };
 
 // Update Details

@@ -66,4 +66,20 @@ const findUserByUsername = async (req, res) => {
   }
 };
 
+
+// // Dashboard route with user ID parameter
+// const userDash = async (req, res) => {
+//   // Check if the user ID in the route matches the one in the token
+//   console.log(req.user);
+//   if (req.user !== req.params.userId) {
+//     return res.status(401).json({ message: 'Unauthorized access to dashboard' });
+//   }
+//   // Proceed with serving the dashboard
+//   res.json({ message: 'Welcome to the dashboard' });
+
+// };
+
+
+
+
 module.exports = { updateUser, findUsers, findUserById, findUserByUsername };

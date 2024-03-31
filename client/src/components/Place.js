@@ -1,36 +1,56 @@
 import React, { useState } from 'react';
 
 const Place = ({ totalStars }) => {
-
-    const cardData = [
+    const [cardData, setCardData] = useState([
         {
             imageUrl: process.env.PUBLIC_URL + "/img/food.jpeg",
             restaurantName: 'Fog Harbor Fish House',
-            recommendation: 'Do you recommend this business?'
+            recommendation: 'Do you recommend this business?',
+            isVisible: true // Add isVisible property to each card
         },
         {
             imageUrl: process.env.PUBLIC_URL + "/img/food.jpeg",
-            restaurantName: 'Fog Harbor Fish House',
-            recommendation: 'Do you recommend this business?'
+            restaurantName: 'Fog House',
+            recommendation: 'Do you recommend this business?',
+            isVisible: true // Add isVisible property to each card
         },
         {
             imageUrl: process.env.PUBLIC_URL + "/img/food.jpeg",
-            restaurantName: 'Fog Harbor Fish House',
-            recommendation: 'Do you recommend this business?'
+            restaurantName: ' Harbor House',
+            recommendation: 'Do you recommend this business?',
+            isVisible: true // Add isVisible property to each card
         },
         {
             imageUrl: process.env.PUBLIC_URL + "/img/food.jpeg",
-            restaurantName: 'Fog Harbor Fish House',
-            recommendation: 'Do you recommend this business?'
+            restaurantName: 'Fish House',
+            recommendation: 'Do you recommend this business?',
+            isVisible: true // Add isVisible property to each card
+        },
+        {
+            imageUrl: process.env.PUBLIC_URL + "/img/food.jpeg",
+            restaurantName: 'Fog  Fish House',
+            recommendation: 'Do you recommend this business?',
+            isVisible: true // Add isVisible property to each card
         },
         // Add more card data objects as needed
-    ];
+    ]);
+
+    const removeCard = (indexToRemove) => {
+        setCardData(prevCardData =>
+            prevCardData.filter((_, index) => index !== indexToRemove)
+        );
+    };
+
+    const handleRatingChange = (event) => {
+        const selectedRating = parseInt(event.target.value, 10);
+        console.log(`User rated: ${selectedRating} stars`);
+    };
 
     return (
         <div className='w-full p-5'>
             <h1 className='text-lg font-extrabold pb-7'>Visited one of these places recently?</h1>
             {cardData.map((card, index) => (
-                <PlaceCard key={index} card={card} />
+                <PlaceCard key={index} card={card} index={index} removeCard={removeCard} handleRatingChange={handleRatingChange} />
             ))}
             <div className='my-10 mb-15'>
                 <p className='text-center font-bold text-blue-500 hover:underline'>
@@ -41,20 +61,13 @@ const Place = ({ totalStars }) => {
     );
 };
 
-const PlaceCard = ({ card }) => {
-    const [isVisible, setIsVisible] = useState(true);
-
+const PlaceCard = ({ card, index, removeCard, handleRatingChange }) => {
     const handleCancel = () => {
-        setIsVisible(false);
-    };
-
-    const handleRatingChange = (event) => {
-        const selectedRating = parseInt(event.target.value, 10);
-        console.log(`User rated: ${selectedRating} stars`);
+        removeCard(index);
     };
 
     return (
-        <div className={`mt-2 ${isVisible ? '' : 'hidden'}`}>
+        <div className={`mt-2 ${card.isVisible ? '' : 'hidden'}`}>
             <div className='bg-white rounded-lg flex p-2 shadow-md'>
                 {/* Image */}
                 <div className='m-1 mr-2'>

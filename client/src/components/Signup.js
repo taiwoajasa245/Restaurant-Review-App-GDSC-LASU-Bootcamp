@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios'; // Import axios for making HTTP requests
-import { Link } from 'react-router-dom/cjs/react-router-dom.min';
+import { Link, useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+
 
 function Signup() {
+    const history = useHistory();
+
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -27,9 +30,15 @@ function Signup() {
         try {
             const response = await axios.post(`${url}/api/signup`, formData);
             console.log('Signup successful:', response.data);
-            // Handle successful signup, such as redirecting the user or showing a success message
+            // Show alert with message from API response
+            alert(response.data.message);
+            // Redirect user to login page
+            history.push('/login');
         } catch (error) {
-            console.error('Signup error:', error);
+            if (error) {
+                alert(error.response.data.message);
+            }
+
             // Handle signup error, such as displaying an error message to the user
         }
     };

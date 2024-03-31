@@ -26,6 +26,17 @@ connectDB();
 app.use('/api/', authRoutes);
 app.use('/api/users', authMiddleware, userRoutes);
 
+// Dashboard Route Handler
+app.get('/api/users/:userId/dashboard', authMiddleware, (req, res) => {
+    // Check if authenticated user matches requested userId
+    if (req.user.id !== req.params.userId) {
+        return res.status(403).json({ message: 'Unauthorized access to dashboard' });
+    }
+
+    // Proceed with fetching dashboard data for the authenticated user
+    // ...
+});
+
 
 //The 404 Route (ALWAYS Keep this as the last route)
 app.use(error)

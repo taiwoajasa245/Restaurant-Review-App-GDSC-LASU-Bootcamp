@@ -10,6 +10,7 @@ import NavX from './components/NavX'
 import Signup from './components/Signup';
 import Login from './components/Login'; 
 import Postreview from './components/Postreview';
+import Dashboard from './components/Dashboard';
 
 function App() {
   return (
@@ -43,6 +44,8 @@ function App() {
               <Login />
               <Footer />
             </Route>
+
+            <Route path="/users/:userId/dashboard" component={Dashboard} />
 
             <Route path='/comming'>
               <Comingsoon />
